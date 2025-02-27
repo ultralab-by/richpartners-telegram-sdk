@@ -1,0 +1,8 @@
+# Compiled output
+/dist
+
+# Node
+/node_modules
+
+# IDEs and editors
+.idea/

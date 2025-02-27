@@ -1,0 +1,36 @@
+{
+  "name": "richpartners-telegram-sdk",
+  "version": "1.0.0",
+  "description": "Контроллер для работы с Telegram Ads",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build",
+    "postbuild": "open http://localhost:9095/index.php"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ultralab-by/richpartners-telegram-sdk"
+  },
+  "keywords": [
+    "telegram",
+    "ads",
+    "richpartners",
+    "push-style",
+    "embedded",
+    "interstitial"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "@telegram-apps/sdk": "^3.0.0",
+    "crypto-js": "^4.1.1",
+    "tslib": "^2.8.1"
+  },
+  "devDependencies": {
+    "open": "^10.1.0",
+    "typescript": "^5.0.0"
+  }
+}
