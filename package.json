@@ -8,7 +8,7 @@
     "build": "tsc",
     "clean": "rm -rf dist",
     "prepublishOnly": "npm run clean && npm run build",
-    "postbuild": "open http://localhost:9095/index.php"
+    "postbuild": "cp -r src/assets dist/assets"
   },
   "repository": {
     "type": "git",
@@ -26,11 +26,16 @@
   "license": "MIT",
   "dependencies": {
     "@telegram-apps/sdk": "^3.0.0",
-    "crypto-js": "^4.1.1",
+    "crypto-js": "^4.2.0",
     "tslib": "^2.8.1"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
     "open": "^10.1.0",
     "typescript": "^5.0.0"
-  }
+  },
+  "files": [
+    "dist",
+    "src/assets/styles.css"
+  ]
 }

@@ -1,4 +1,4 @@
-export interface personalData {
+export interface RequestData {
     publisher_id?: string;
     user_agent?: string;
     source_id?: string;
@@ -12,7 +12,7 @@ export interface personalData {
     motivated?: boolean;
     bid_floor?: number;
     number_of_bids?: number;
-    widget_id?: string;
+    widget_id?: string | null;
     width?: number;
     height?: number;
     ip?: string;

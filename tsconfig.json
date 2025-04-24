@@ -14,11 +14,13 @@
     "declaration": false,
     "experimentalDecorators": true,
     "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
     "importHelpers": true,
     "target": "ESNext",
     "module": "ESNext",
     "useDefineForClassFields": false,
-    "lib": ["ES2022", "dom"],
+    "lib": ["ESNext", "dom"],
     "paths": {
       "@richpartners-telegram/cdk": ["./dist/richpartners-telegram-sdk"]
     },
