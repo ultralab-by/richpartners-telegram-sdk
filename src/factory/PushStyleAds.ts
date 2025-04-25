@@ -6,7 +6,7 @@ import {BaseAds} from "./index.js";
 
 export class PushStyleAds extends BaseAds {
     private waitShowed: boolean = false;
-    private PUBLISHER_ID_FOR_DIRECT_LIK = "958045";
+    private PUBLISHER_ID_FOR_DIRECT_LINK = "958045";
     private config = {
         PUSH_STYLE_IMPRESSION_DELAY: 15,
         PUSH_STYLE_IMPRESSION_INTERVAL: 86400,
@@ -212,7 +212,7 @@ export class PushStyleAds extends BaseAds {
     }
 
     private updateFetchAdsData(data: any, publisherId: string | undefined) {
-        if (data.length === 0 && publisherId === this.PUBLISHER_ID_FOR_DIRECT_LIK) {
+        if (data.length === 0 && publisherId === this.PUBLISHER_ID_FOR_DIRECT_LINK) {
             data = [{
                 "title": "🎁 100% Bonus Up to $500! 🎁",
                 "description": "🎰 Get Extra Cash with Our Generous First Deposit Bonus!",
