@@ -1,0 +1,19 @@
+{
+  "compact": true,
+  "controlFlowFlattening": true,
+  "deadCodeInjection": true,
+  "identifierNamesGenerator": "hexadecimal",
+  "stringArray": true,
+  "rotateStringArray": true,
+  "selfDefending": true,
+  "debugProtection": true,
+  "reservedNames": [
+    "TelegramAdsController",
+    "initialize",
+    "triggerNativeNotification",
+    "triggerBannerAds",
+    "setSource",
+    "triggerInterstitialBanner",
+    "triggerInterstitialVideo"
+  ]
+}
