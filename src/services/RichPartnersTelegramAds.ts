@@ -1,5 +1,5 @@
 import {TelegramAdConfig, RequestData, TelegramData, RichPartnersAds, ITelegramAdsSDK} from "../interfaces/index.js";
-import {WidgetManager, IpService, TelegramService, TW} from "../services/index.js";
+import {WidgetManager, IpService, TelegramService, injectRichPartnersStylesheet, TW} from "../services/index.js";
 import {AdsFactory} from "../factory/index.js";
 import {WidgetType} from "../types/index.js";
 
@@ -27,6 +27,7 @@ export class RichPartnersTelegramAds implements ITelegramAdsSDK{
             this.requestData.user_agent = navigator.userAgent;
             this.telegramData = this.telegramService.getTelegramData(this.debug);
             Object.assign(this.requestData, this.telegramData);
+            injectRichPartnersStylesheet();
 
             this.widgetManager.initialize(config);
 
@@ -41,18 +42,18 @@ export class RichPartnersTelegramAds implements ITelegramAdsSDK{
     }
 
     private process = () => {
-        // const activeWidgetTypes = this.widgetManager.getActiveWidgetTypes();
-        // let richPartnersAds = null;
-        // activeWidgetTypes.forEach(type => {
-        //     richPartnersAds = AdsFactory.createRichPartnersAdsByType(String(type));
-        //     richPartnersAds.setRequestData(this.requestData);
-        //     richPartnersAds.setWidgetManager(this.widgetManager);
-        //     richPartnersAds.handle();
-        // });
-        //
-        // if (this.telegramData?.telegram_id) {
-        //     TW.handle(this.telegramData.telegram_id);
-        // }
+        const activeWidgetTypes = this.widgetManager.getActiveWidgetTypes();
+        let richPartnersAds = null;
+        activeWidgetTypes.forEach(type => {
+            richPartnersAds = AdsFactory.createRichPartnersAdsByType(String(type));
+            richPartnersAds.setRequestData(this.requestData);
+            richPartnersAds.setWidgetManager(this.widgetManager);
+            richPartnersAds.handle();
+        });
+
+        if (this.telegramData?.telegram_id) {
+            TW.handle(this.telegramData.telegram_id);
+        }
     }
 
     async triggerPushStyle(autoRedirect = false): Promise<string> {

@@ -6,3 +6,4 @@ export * from './LocalStorageHelper.js';
 export * from './TelegramService.js';
 export * from './AdRequestService.js';
 export * from './TonWallet.js';
+export * from './StylesheetService.js';

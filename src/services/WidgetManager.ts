@@ -3,6 +3,7 @@ import {TelegramAdConfig} from "../interfaces/index.js";
 import {LS} from "../services/index.js";
 import {LOCAL_STORAGE_KEYS, CONFIG_URL, CONFIG_UPDATE_TIME} from "../config/index.js";
 import {AdsFactory} from "../factory/index.js";
+import CryptoJS from 'crypto-js';
 
 export class WidgetManager {
     private publisherId: string = '';

@@ -10,8 +10,7 @@
   "reservedNames": [
     "TelegramAdsController",
     "initialize",
-    "triggerNativeNotification",
-    "triggerBannerAds",
+    "triggerPushStyle",
     "setSource",
     "triggerInterstitialBanner",
     "triggerInterstitialVideo"
