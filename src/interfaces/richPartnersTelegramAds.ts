@@ -8,5 +8,7 @@ export interface TelegramAdConfig {
 
 export interface ITelegramAdsSDK {
     initialize(config: TelegramAdConfig): void;
-    triggerNativeNotification(arg: boolean): Promise<void>;
+    triggerPushStyle(arg: boolean): Promise<string>;
+    triggerInterstitialBanner(arg: boolean): Promise<string>;
+    triggerInterstitialVideo(arg: boolean): Promise<string>;
 }

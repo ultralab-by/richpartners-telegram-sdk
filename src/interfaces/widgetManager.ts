@@ -1,4 +1,4 @@
-export interface WidgetManager {
+export interface widgetManager {
     MD5: string;
     LIMIT_IMPRESSION_PER_VIEW: number;
     INTERSTITIAL_BANNER_WIDTH: number;

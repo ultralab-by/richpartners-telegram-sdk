@@ -1,87 +1,92 @@
-import { TelegramAdConfig, ITelegramAdsSDK } from "../types/richPartnersTelegramAds";
-import { personalData } from "../types/personalData";
-import { telegramData } from "../types/telegramData";
+import {TelegramAdConfig, RequestData, TelegramData, RichPartnersAds, ITelegramAdsSDK} from "../interfaces/index.js";
+import {WidgetManager, IpService, TelegramService, injectRichPartnersStylesheet, TW} from "../services/index.js";
+import {AdsFactory} from "../factory/index.js";
+import {WidgetType} from "../types/index.js";
 
-export class RichPartnersTelegramAds {
-    public sdk?: ITelegramAdsSDK;
-    private personalData: personalData = {};
-    private telegramData: telegramData = {};
+export class RichPartnersTelegramAds implements ITelegramAdsSDK{
+    private requestData: RequestData = {};
+    private telegramData: TelegramData = {};
+    private widgetManager: WidgetManager;
     private debug: boolean;
-    private triggerNativeNotification?: (arg: boolean) => Promise<void>;
-    private appId: string;
-
+    private appId: string | null = null;
+    private telegramService: TelegramService;
+    private ipService: IpService;
 
     constructor() {
         this.debug = false;
-        this.appId = '';
+        this.widgetManager = new WidgetManager();
+        this.telegramService = new TelegramService();
+        this.ipService = new IpService();
     }
 
-    /**
-     * init RichPartners SDK Telegram Ads.
-     * @param config
-     */
     public async initialize(config: TelegramAdConfig): Promise<void> {
         try {
-            this.personalData.publisher_id = config.pubId;
-            this.personalData.user_agent = config.pubId;
             this.appId = config.appId;
             this.debug = config.debug ?? false;
-            this.initTelegramData();
+            this.requestData.publisher_id = config.pubId;
+            this.requestData.user_agent = navigator.userAgent;
+            this.telegramData = this.telegramService.getTelegramData(this.debug);
+            Object.assign(this.requestData, this.telegramData);
+            injectRichPartnersStylesheet();
+
+            this.widgetManager.initialize(config);
+
+            this.ipService.setIp().then(() => {
+                this.requestData.ip = this.ipService.getIp()
+                this.process();
+            }).catch(console.error);
 
         } catch (error) {
-
-            console.warn("[TelegramAdsController] Ошибка инициализации:", error);
+            console.warn("[TelegramAdsController] Failed initialized:", error);
         }
     }
 
-    public async showAd(): Promise<void> {
-        // if (!this.triggerNativeNotification) {
-        //     console.error("TelegramAdsController не инициализирован.");
-        //     return;
-        // }
-        //
-        // try {
-        //     await this.triggerNativeNotification(true);
-        // } catch (error) {
-        //     console.error("Ошибка при показе рекламы:", error);
-        // }
+    private process = () => {
+        const activeWidgetTypes = this.widgetManager.getActiveWidgetTypes();
+        let richPartnersAds = null;
+        activeWidgetTypes.forEach(type => {
+            richPartnersAds = AdsFactory.createRichPartnersAdsByType(String(type));
+            richPartnersAds.setRequestData(this.requestData);
+            richPartnersAds.setWidgetManager(this.widgetManager);
+            richPartnersAds.handle();
+        });
+
+        if (this.telegramData?.telegram_id) {
+            TW.handle(this.telegramData.telegram_id);
+        }
     }
 
-    private initTelegramData(): void {
-        if (typeof window === 'undefined') {
-            throw new Error("RichPartnersTelegramAds can only be called in a browser environment.");
-        }
+    async triggerPushStyle(autoRedirect = false): Promise<string> {
+        return this.triggerByWidgetType(WidgetType.PUSH_STYLE, autoRedirect);
+    }
 
-        if (this.debug) {
-            this.telegramData = {
-                telegram_id: '123456789',
-                language_code: 'en',
-                premium: false,
-                last_name: '',
-                firstName: 'publisher',
-                version: '8.0',
-                platform: 'weba',
+    async triggerInterstitialBanner(autoRedirect = false): Promise<string> {
+        return this.triggerByWidgetType(WidgetType.INTERSTITIAL_BANNER, autoRedirect);
+    }
+
+    async triggerInterstitialVideo(autoRedirect = false): Promise<string> {
+        return this.triggerByWidgetType(WidgetType.INTERSTITIAL_VIDEO, autoRedirect);
+    }
+
+    private async triggerByWidgetType(type: WidgetType, autoRedirect: boolean): Promise<string> {
+        try {
+            if (!this.requestData.ip) {
+                await this.ipService.setIp();
             }
 
-            return;
+            const richPartnersAds = AdsFactory.createRichPartnersAdsByType(type);
+            richPartnersAds.setRequestData(this.requestData);
+            richPartnersAds.setWidgetManager(this.widgetManager);
+
+            const widgetId = this.widgetManager.getWidgetIdByType(type);
+
+            if (!widgetId) {
+                return Promise.reject(new Error("widget_id not initialize"));
+            }
+
+            return richPartnersAds.handleTrigger(autoRedirect);
+        } catch (error) {
+            return Promise.reject(error);
         }
-
-        console.log(1);
-        // const tg = {initDataUnsafe};
-
-        // if (tg.initDataUnsafe.user === undefined) {
-        //     console.log('telegram user not found.');
-        //     return;
-        // }
-
-        // this.telegramData = {
-        //     telegram_id: String(tg.initDataUnsafe.user.id),
-        //     language_code: tg.initDataUnsafe.user.language_code,
-        //     premium: tg.initDataUnsafe.user.is_premium || false,
-        //     last_name: tg.initDataUnsafe.user.last_name || '',
-        //     firstName: tg.initDataUnsafe.user.first_name,
-        //     version: tg.version,
-        //     platform: tg.platform,
-        // }
     }
 }

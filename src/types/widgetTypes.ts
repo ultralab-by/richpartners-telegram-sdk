@@ -1,5 +1,10 @@
 export enum WidgetType {
-    PushStyle = 'push_style',
-    EmbeddedBanner = 'embedded_banner',
-    InterstitialBanner = 'interstitial_banner',
+    PUSH_STYLE = "PUSH_STYLE",
+    PUSH_STYLE_OLD = "native",
+    EMBEDDED_BANNER = "EMBEDDED_BANNER",
+    EMBEDDED_BANNER_OLD = "banner",
+    INTERSTITIAL_BANNER = "INTERSTITIAL_BANNER",
+    INTERSTITIAL_VIDEO = "INTERSTITIAL_VIDEO",
 }
+
+export type WidgetAdTypes = WidgetType.PUSH_STYLE | WidgetType.EMBEDDED_BANNER | WidgetType.INTERSTITIAL_BANNER | WidgetType.INTERSTITIAL_VIDEO;

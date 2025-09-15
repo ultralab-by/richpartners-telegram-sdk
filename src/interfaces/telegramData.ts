@@ -1,4 +1,4 @@
-export interface telegramData {
+export interface TelegramData {
     telegram_id?: string;
     language_code?: string;
     premium?: boolean;

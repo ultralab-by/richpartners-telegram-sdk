@@ -1,5 +1,7 @@
-export class LocalStorageHelper {
-    static set(key: string, value: any, ttl: number | null = null): void {
+import {LOCAL_STORAGE_KEYS} from "../config/index.js";
+
+export class LocalStorageService {
+    public set(key: string, value: any, ttl: number | null = null): void {
         if (ttl !== null) {
             const now = Date.now();
             const item = {
@@ -12,7 +14,7 @@ export class LocalStorageHelper {
         }
     }
 
-    static get<T>(key: string): T | null | undefined {
+    public get<T>(key: string) {
         const itemStr = localStorage.getItem(key);
         if (!itemStr) return null;
         if (itemStr === 'undefined') return undefined;
@@ -29,11 +31,18 @@ export class LocalStorageHelper {
         }
     }
 
-    static remove(key: string): void {
+    public remove(key: string): void {
         localStorage.removeItem(key);
     }
 
-    static clear(): void {
+    public clear(): void {
         localStorage.clear();
     }
+
+    public getWithPrefix(key: string)
+    {
+        return LS.get(key);
+    }
 }
+
+export const LS = new LocalStorageService();
